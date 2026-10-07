@@ -59,7 +59,7 @@ cosmic_load <- function(path, genes = NULL, somatic_only = TRUE) {
     # Stream with grep pre-filter when possible (fast on the multi-GB file)
     pat <- paste(genes, collapse = "|")
     cmd <- sprintf("%s %s | grep -E -w '%s'",
-                   if (grepl("\\.gz$", path)) "zcat" else "cat", shQuote(path), pat)
+                   if (grepl("\\.gz$", path)) "gzip -cd" else "cat", shQuote(path), pat)
     dt <- tryCatch(fread(cmd = cmd, header = FALSE, col.names = hdr, quote = ""),
                    error = function(e) NULL)
     if (is.null(dt)) dt <- fread(path, quote = "")
