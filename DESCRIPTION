@@ -1,0 +1,32 @@
+Package: xsmut
+Title: Cross-Species Comparison of Somatic Mutations Against Human COSMIC
+Version: 0.1.0
+Authors@R: person("Your", "Name", email = "you@example.org", role = c("aut", "cre"))
+Description: Checks genes against the COSMIC Cancer Gene Census, retrieves human
+    COSMIC mutations for a gene, maps mutations annotated in any Ensembl species
+    (e.g. macaque, Mmul_10) onto human reference coordinates via ortholog protein
+    alignment, and draws a gene-model plot with human COSMIC mutations in an upper
+    panel and the user's species mutations in a lower panel. Includes a Shiny app.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends: R (>= 4.1)
+Imports:
+    httr2,
+    jsonlite,
+    data.table,
+    ggplot2,
+    patchwork,
+    Biostrings,
+    pwalign,
+    shiny,
+    DT,
+    memoise
+Suggests:
+    testthat (>= 3.0.0),
+    rtracklayer,
+    GenomicRanges,
+    IRanges
+biocViews: Software
+Config/testthat/edition: 3

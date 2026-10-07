@@ -1,0 +1,11 @@
+sample_id,gene,aa_change,consequence
+MM001,TP53,p.R175H,missense_variant
+MM002,TP53,p.R248Q,missense_variant
+MM003,TP53,p.R248W,missense_variant
+MM004,TP53,p.R273H,missense_variant
+MM005,TP53,p.R273C,missense_variant
+MM006,TP53,p.G245S,missense_variant
+MM007,TP53,p.Y220C,missense_variant
+MM008,TP53,p.E285K,missense_variant
+MM009,TP53,p.Q136*,stop_gained
+MM010,TP53,p.P72fs,frameshift_variant

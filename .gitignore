@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+data/cosmic/*
+!data/cosmic/.gitkeep
+*.tsv
+*.tsv.gz
