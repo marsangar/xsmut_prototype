@@ -127,19 +127,24 @@ cosmic_gene_listed <- function(genes, census_path = NULL, mutations = NULL) {
                     role = NA_character_, n_cosmic_mutations = NA_integer_)
   if (!is.null(census_path)) {
     cg <- fread(census_path)
-    sym <- if ("GENE_SYMBOL" %in% names(cg)) "GENE_SYMBOL" else "Gene Symbol"
-    tier <- intersect(c("TIER", "Tier"), names(cg))
-    role <- intersect(c("ROLE_IN_CANCER", "Role in Cancer"), names(cg))
-    idx <- match(genes, cg[[sym]])
-    out[, in_census := !is.na(idx)]
-    if (length(tier)) out[, tier := as.character(cg[[tier[1]]][idx])]
-    if (length(role)) out[, role := as.character(cg[[role[1]]][idx])]
+    sym_col  <- intersect(c("GENE_SYMBOL", "Gene Symbol"), names(cg))[1]
+    tier_col <- intersect(c("TIER", "Tier"), names(cg))[1]
+    role_col <- intersect(c("ROLE_IN_CANCER", "Role in Cancer"), names(cg))[1]
+    if (is.na(sym_col)) stop("Census file has no GENE_SYMBOL / 'Gene Symbol' column")
+    idx <- match(toupper(genes), toupper(cg[[sym_col]]))
+    # compute outside the data.table call to avoid column/variable name clashes
+    tier_val <- if (!is.na(tier_col)) as.character(cg[[tier_col]][idx]) else rep(NA_character_, length(genes))
+    role_val <- if (!is.na(role_col)) as.character(cg[[role_col]][idx]) else rep(NA_character_, length(genes))
+    data.table::set(out, j = "in_census", value = !is.na(idx))
+    data.table::set(out, j = "tier", value = tier_val)
+    data.table::set(out, j = "role", value = role_val)
   }
   if (!is.null(mutations)) {
     n <- mutations[, .N, by = gene]
-    out[, n_cosmic_mutations := n$N[match(gene, n$gene)]]
-    out[is.na(n_cosmic_mutations), n_cosmic_mutations := 0L]
-    if (is.null(census_path)) out[, in_census := n_cosmic_mutations > 0]
+    n_val <- n$N[match(toupper(genes), toupper(n$gene))]
+    n_val[is.na(n_val)] <- 0L
+    data.table::set(out, j = "n_cosmic_mutations", value = as.integer(n_val))
+    if (is.null(census_path)) data.table::set(out, j = "in_census", value = n_val > 0)
   }
   out[]
 }
